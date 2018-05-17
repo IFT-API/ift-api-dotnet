@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -83,7 +83,7 @@ namespace IFT
 
         static async Task GetProduitsDosesReferenceAsStringAsync(String campagneId, String cultureId, String produitId)
         {
-            String query = $"campagneId={campagneId}&cultureId={cultureId}&produitId={produitId}";
+            String query = $"campagneIdMetier={campagneId}&cultureIdMetier={cultureId}&produitLibelle={produitId}";
 
             Console.WriteLine($"GET produits-doses-reference");
             HttpResponseMessage response = await client.GetAsync($"produits-doses-reference?{query}");
@@ -97,12 +97,12 @@ namespace IFT
 
         static async Task GetIftTraitementAsStringAsync(String campagneId, String numeroAmmId, String cultureId, String cibleId, String traitementId, String uniteId, Double dose, Double facteurDeCorrection)
         {
-            String query = $"campagneId={campagneId}" +
-                           $"&numeroAmmId={numeroAmmId}" +
-                           $"&cultureId={cultureId}" +
-                           $"&cibleId={cibleId}" +
-                           $"&traitementId={traitementId}" +
-                           $"&uniteId={uniteId}" +
+            String query = $"campagneIdMetier={campagneId}" +
+                           $"&numeroAmmIdMetier={numeroAmmId}" +
+                           $"&cultureIdMetier={cultureId}" +
+                           $"&cibleIdMetier={cibleId}" +
+                           $"&typeTraitementIdMetier={traitementId}" +
+                           $"&uniteIdMetier={uniteId}" +
                            $"&dose={dose}" +
                            $"&facteurDeCorrection={facteurDeCorrection}";
 
@@ -123,7 +123,7 @@ namespace IFT
 
         static async Task RunAsync()
         {
-            client.BaseAddress = new Uri("https://ift-api.herokuapp.com/api/");
+            client.BaseAddress = new Uri("https://alim-pprd.agriculture.gouv.fr/ift-api/api/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -134,14 +134,15 @@ namespace IFT
                 await GetAllCampagnesAsync();
                 await GetCampagneAsStringAsync("2017");
                 await GetCampagneAsync("2017");
-                await GetProduitsDosesReferenceAsStringAsync("e02b1e37-669b-497e-be4c-e8b9359cb587", "6f288e46-ead7-491d-9213-b498dcf82329", "64fa2f66-9cd6-46af-8ff0-2882edcfd869");
-                await GetIftTraitementAsStringAsync("e02b1e37-669b-497e-be4c-e8b9359cb587",
-                                                    "d76038c9-c456-4487-91ea-3fa1a8853978",
-                                                    "6f288e46-ead7-491d-9213-b498dcf82329",
-                                                    "19cc0b09-7d11-4ddf-848d-4f6c94a4febd",
-                                                    "f4dd98e2-0638-4912-86ed-8cc3a9e9d728",
-                                                    "d57ca2cc-a3ba-4bff-bae7-0d0bde82a0e3",
-                                                    0.06,
+                await GetProduitsDosesReferenceAsStringAsync("2017", "1004", "ACAKILL");
+
+                await GetIftTraitementAsStringAsync("2017",
+                                                    "2010441",
+                                                    "1163",
+                                                    "2",
+                                                    "T21",
+                                                    "U4",
+                                                    1.5,
                                                     100);
             }
             catch (Exception e)
